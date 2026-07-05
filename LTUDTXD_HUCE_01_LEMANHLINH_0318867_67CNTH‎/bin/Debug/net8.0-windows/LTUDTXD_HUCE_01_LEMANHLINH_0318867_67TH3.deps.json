@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3/1.0.0": {
+        "runtime": {
+          "LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
