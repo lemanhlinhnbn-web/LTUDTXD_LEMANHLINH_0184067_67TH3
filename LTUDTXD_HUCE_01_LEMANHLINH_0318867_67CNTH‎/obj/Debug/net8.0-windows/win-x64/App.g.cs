@@ -31,7 +31,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3 {
+namespace LTUDTXD_HUCE_01_LEMANHLINH_0184067_67CNTH {
     
     
     /// <summary>
@@ -51,7 +51,7 @@ namespace LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3 {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3;component/app.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/LTUDTXD_HUCE_01_LEMANHLINH_0184067_67CNTH;component/app.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\App.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
@@ -67,7 +67,7 @@ namespace LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3 {
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "9.0.3.0")]
         public static void Main() {
-            LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.App app = new LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.App();
+            LTUDTXD_HUCE_01_LEMANHLINH_0184067_67CNTH.App app = new LTUDTXD_HUCE_01_LEMANHLINH_0184067_67CNTH.App();
             app.InitializeComponent();
             app.Run();
         }

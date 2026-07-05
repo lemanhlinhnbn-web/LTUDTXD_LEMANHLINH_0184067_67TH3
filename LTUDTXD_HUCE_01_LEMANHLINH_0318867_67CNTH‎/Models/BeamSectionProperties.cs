@@ -1,4 +1,4 @@
-namespace LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.Models;
+﻿namespace LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH.Models;
 
 public sealed class BeamSectionProperties
 {

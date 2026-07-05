@@ -1,8 +1,8 @@
-using System.Windows;
-using LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.Services;
-using LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.ViewModels;
+﻿using System.Windows;
+using LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH.Services;
+using LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH.ViewModels;
 
-namespace LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3;
+namespace LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH;
 
 public partial class App : Application
 {
@@ -13,10 +13,13 @@ public partial class App : Application
         base.OnStartup(e);
 
         _etabsService = new EtabsService();
+        IBeamCalculationService calculationService = new BeamCalculationService();
+        IReportExportService reportExportService = new ExcelReportExportService();
+        IWindowService windowService = new WindowService();
 
         var mainWindow = new MainWindow
         {
-            DataContext = new MainViewModel(_etabsService)
+            DataContext = new MainViewModel(_etabsService, calculationService, reportExportService, windowService)
         };
 
         MainWindow = mainWindow;
