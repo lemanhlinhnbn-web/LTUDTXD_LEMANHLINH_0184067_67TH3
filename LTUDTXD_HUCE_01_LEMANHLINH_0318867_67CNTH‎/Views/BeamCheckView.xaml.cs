@@ -1,6 +1,6 @@
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
-namespace LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.Views;
+namespace LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH.Views;
 
 public partial class BeamCheckView : UserControl
 {

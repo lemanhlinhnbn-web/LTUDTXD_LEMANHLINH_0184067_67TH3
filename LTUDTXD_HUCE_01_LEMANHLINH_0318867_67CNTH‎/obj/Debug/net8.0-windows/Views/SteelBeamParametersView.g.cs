@@ -31,7 +31,7 @@ using System.Windows.Shapes;
 using System.Windows.Shell;
 
 
-namespace LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.Views {
+namespace LTUDTXD_HUCE_01_LEMANHLINH_0184067_67CNTH.Views {
     
     
     /// <summary>
@@ -51,7 +51,7 @@ namespace LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri(("/LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3;component/views/steelbeamparametersview" +
+            System.Uri resourceLocater = new System.Uri(("/LTUDTXD_HUCE_01_LEMANHLINH_0184067_67CNTH;component/views/steelbeamparametersview" +
                     ".xaml"), System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\SteelBeamParametersView.xaml"

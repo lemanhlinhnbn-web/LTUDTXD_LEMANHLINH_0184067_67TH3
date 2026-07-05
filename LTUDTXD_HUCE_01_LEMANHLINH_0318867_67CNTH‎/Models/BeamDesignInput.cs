@@ -1,7 +1,7 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.Models;
+namespace LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH.Models;
 
 public sealed class BeamDesignInput : INotifyPropertyChanged
 {
@@ -33,8 +33,22 @@ public sealed class BeamDesignInput : INotifyPropertyChanged
     public double DesignShear { get => _designShear; set => SetField(ref _designShear, value); }
     public double WorkingConditionFactor { get => _workingConditionFactor; set => SetField(ref _workingConditionFactor, value); }
     public double LateralTorsionalBucklingFactor { get => _lateralTorsionalBucklingFactor; set => SetField(ref _lateralTorsionalBucklingFactor, value); }
-    
-    public string Standard { get; } = "TCVN 5575:2012";
+
+    public string SteelGrade
+    {
+        get => _steelGrade;
+        set
+        {
+            if (_steelGrade == value)
+            {
+                return;
+            }
+
+            _steelGrade = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SteelGrade)));
+        }
+    }
+    public string Standard { get; } = "TCVN 2275:2024";
 
     private void SetField(ref double field, double value, [CallerMemberName] string? propertyName = null)
     {

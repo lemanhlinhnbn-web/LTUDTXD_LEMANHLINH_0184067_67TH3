@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using System.Windows.Input;
 
-namespace LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.Commands;
+namespace LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH.Commands;
 
 public sealed class RelayCommand : ICommand
 {

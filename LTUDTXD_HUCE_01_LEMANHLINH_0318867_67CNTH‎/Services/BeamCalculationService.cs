@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.Models;
+using LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH.Models;
 
-namespace LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.Services;
+namespace LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH.Services;
 
 public sealed class BeamCalculationService : IBeamCalculationService
 {
@@ -22,7 +22,7 @@ public sealed class BeamCalculationService : IBeamCalculationService
             + tw * Math.Pow(hw, 3) / 12;
         double iy = 2 * tf * Math.Pow(b, 3) / 12
             + hw * Math.Pow(tw, 3) / 12;
-        double wx = ix / (h / 2)
+        double wx = ix / (h / 2);
         double radiusX = Math.Sqrt(ix / area);
         double radiusY = Math.Sqrt(iy / area);
         double shearArea = hw * tw;
@@ -66,7 +66,7 @@ public sealed class BeamCalculationService : IBeamCalculationService
         };
 
         double phiB = input.LateralTorsionalBucklingFactor;
-        if (phiB <= 0 | phiB > 1)
+        if (phiB <= 0 || phiB > 1)
         {
             throw new ArgumentException("Hệ số ổn định tổng thể φb phải lớn hơn 0 và không vượt quá 1.");
         }
@@ -101,8 +101,8 @@ public sealed class BeamCalculationService : IBeamCalculationService
 
         double governingStrength = Math.Max(bendingRatio, Math.Max(shearRatio, interactionRatio));
         double governingStability = Math.Max(lateralRatio, Math.Max(flangeRatio, webRatio));
-        string governing = governingStrength >= governingStability 
-            ? GetGoverningName(strength) 
+        string governing = governingStrength >= governingStability
+            ? GetGoverningName(strength)
             : GetGoverningName(stability);
 
         return new BeamCalculationResult
@@ -111,7 +111,7 @@ public sealed class BeamCalculationService : IBeamCalculationService
             StrengthChecks = strength,
             StabilityChecks = stability,
             GoverningStrengthRatio = governingStrength,
-            GoverningStabilityRatio = governingStability
+            GoverningStabilityRatio = governingStability,
             GoverningCondition = governing,
             IsPassed = governingStrength <= 1 && governingStability <= 1
         };
@@ -163,7 +163,7 @@ public sealed class BeamCalculationService : IBeamCalculationService
             throw new ArgumentException("Các kích thước tiết diện phải lớn hơn 0.");
         }
 
-        if (input.Height <= input.FlangeThickness)
+        if (input.Height <= 2 * input.FlangeThickness)
         {
             throw new ArgumentException("Chiều cao dầm phải lớn hơn hai lần chiều dày cánh.");
         }

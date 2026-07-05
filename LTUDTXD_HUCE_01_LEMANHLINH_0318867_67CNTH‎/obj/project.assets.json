@@ -1,31 +1,31 @@
 {
-  "version": 4,
+  "version": 3,
   "targets": {
-    "net48": {},
-    "net48/win-x64": {}
+    ".NETFramework,Version=v4.8": {},
+    ".NETFramework,Version=v4.8/win-x64": {}
   },
   "libraries": {},
   "projectFileDependencyGroups": {
-    "net48": []
+    ".NETFramework,Version=v4.8": []
   },
   "packageFolders": {
-    "C:\\Users\\M7720\\.nuget\\packages\\": {},
+    "C:\\Users\\Admin\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\M7720\\Desktop\\Nhom Le Manh Linh\\LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3\\LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3\\LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.csproj",
-      "projectName": "LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3",
-      "projectPath": "C:\\Users\\M7720\\Desktop\\Nhom Le Manh Linh\\LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3\\LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3\\LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3.csproj",
-      "packagesPath": "C:\\Users\\M7720\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\M7720\\Desktop\\Nhom Le Manh Linh\\LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3\\LTUDTXD_HUCE_01_LEMANHLINH_0318867_67TH3\\obj\\",
+      "projectUniqueName": "D:\\Tai lieu hoc tap\\Canh code\\LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH\\LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH\\LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH.csproj",
+      "projectName": "LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH",
+      "projectPath": "D:\\Tai lieu hoc tap\\Canh code\\LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH\\LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH\\LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "D:\\Tai lieu hoc tap\\Canh code\\LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH\\LTUDTXD_HUCE_LEMANHLINH_0184067_67CNTH\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\M7720\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -38,7 +38,6 @@
       },
       "frameworks": {
         "net48": {
-          "framework": "net48",
           "targetAlias": "net48",
           "projectReferences": {}
         }
@@ -53,13 +52,12 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.300"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net48": {
-        "framework": "net48",
         "targetAlias": "net48",
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201\\RuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {
