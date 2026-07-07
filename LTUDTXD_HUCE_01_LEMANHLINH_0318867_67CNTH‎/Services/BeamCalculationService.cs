@@ -10,22 +10,22 @@ public sealed class BeamCalculationService : IBeamCalculationService
     {
         Validate(input);
 
-        double h = input.Height;
-        double b = input.FlangeWidth;
-        double tw = input.WebThickness;
-        double tf = input.FlangeThickness;
-        double hw = h - 2 * tf;
+        double h = input.Height;                       // Chiều cao dầm (mm)
+        double b = input.FlangeWidth;                  // Bề rộng cánh (mm) 
+        double tw = input.WebThickness;                // Chiều dày bụng (mm)
+        double tf = input.FlangeThickness;             // Chiều dày cánh (mm)
+        double hw = h - 2 * tf;                        // Chiều cao bản bụng (mm)
 
-        double area = 2 * b * tf + hw * tw;
-        double ix = 2 * (b * Math.Pow(tf, 3) / 12
+        double area = 2 * b * tf + hw * tw;            // Diện tích tiết diện (mm2)
+        double ix = 2 * (b * Math.Pow(tf, 3) / 12      // Moment quán tính theo trục X (Ix)
             + b * tf * Math.Pow(h / 2 - tf / 2, 2))
             + tw * Math.Pow(hw, 3) / 12;
-        double iy = 2 * tf * Math.Pow(b, 3) / 12
+        double iy = 2 * tf * Math.Pow(b, 3) / 12       // Moment quán tính theo trục Y (Iy)
             + hw * Math.Pow(tw, 3) / 12;
-        double wx = ix / (h / 2);
-        double radiusX = Math.Sqrt(ix / area);
+        double wx = ix / (h / 2);                      // Moment kháng uốn (Wx)
+        double radiusX = Math.Sqrt(ix / area);          
         double radiusY = Math.Sqrt(iy / area);
-        double shearArea = hw * tw;
+        double shearArea = hw * tw;                    // Diện tích chịu cắt
 
         var section = new BeamSectionProperties
         {
@@ -39,30 +39,51 @@ public sealed class BeamCalculationService : IBeamCalculationService
             ShearArea = shearArea
         };
 
-        double ry = input.DesignStrength;
-        double gammaC = input.WorkingConditionFactor;
-        double rs = 0.58 * ry;
+        double ry = input.DesignStrength;               // Cường độ chảy của thép ry                         
+        double gammaC = input.WorkingConditionFactor;   // Hệ số điều kiện làm việc γc
+        double rs = 0.58 * ry;                          // Cường độ chịu cắt tính toán rs
+        // Đổi đơn vị kNm sang Nmm
         double momentNmm = Math.Abs(input.DesignMoment) * 1_000_000;
+        // Đổi đơn vị kN sang N
         double shearN = Math.Abs(input.DesignShear) * 1_000;
+        // V tại tiết diện có M max, dùng cho kiểm tra ứng suất tương đương.
+        // Nếu người dùng nhập tay và bỏ trống, lấy an toàn bằng V thiết kế.
+        double shearAtmomentN = input.ShearAtMaxMoment > 0
+            ? Math.Abs(input.ShearAtMaxMoment) * 1_000
+            : shearN;
+
+        // Mômen tĩnh nửa tiết diện đối với trục trung hoà (τ max giữa bản bụng).
+        double staticMomentHalf = b * tf * (h - tf) / 2 + tw * hw * hw / 8;
+        // Môment tĩnh riêng bản cánh (τ tại chỗ tiếp giáp bụng - cánh).
+        double staticMomentFlange = b * tf * (h - tf) / 2;
 
         double bendingStress = momentNmm / wx;
-        double shearStress = shearN / shearArea;
         double bendingRatio = bendingStress / (ry * gammaC);
+
+        // Bền cắt theo TCVN 5575: τ = V.S/(I.tw) ≤ Rs.γc, với V max toàn dầm.
+        double shearStress = shearN * staticMomentHalf / (ix * tw);        
         double shearRatio = shearStress / (rs * gammaC);
-        double interactionRatio = Math.Sqrt(
-            bendingRatio * bendingRatio + shearRatio * shearRatio);
+
+        // Ứng suất tương đương tại chỗ tiếp giáp bụng - cánh, cùng tiết diện M max:
+        // σtđ = sqrt(σ1² + 3·τ1²) ≤ 1,15·Ry·γc (TCVN 5575).
+        double sigmal = momentNmm / ix * (hw / 2);
+        double tau1 = shearAtmomentN * staticMomentFlange / (ix * tw);
+        double equivalentStress = Math.Sqrt(sigmal * sigmal + 3 * tau1 * tau1);
+        double interactionRatio = equivalentStress / (1.15 * ry * gammaC);
 
         var strength = new List<BeamCheckResult>
         {
             CreateResult("Bền uốn", "Ứng suất pháp do mô men",
                 "σ ≤ Ry·γc", bendingRatio,
-                $"{bendingStress:0.00} / {ry * gammaC:0.00} MPa", "Mô men thiết kế"),
+                $"{bendingStress:0.00} / {ry * gammaC:0.00} MPa", "M max toàn dầm"),
             CreateResult("Bền cắt", "Ứng suất tiếp bản bụng",
-                "τ ≤ Rs·γc", shearRatio,
-                $"{shearStress:0.00} / {rs * gammaC:0.00} MPa", "Rs = 0,58Ry"),
-            CreateResult("Tổ hợp", "Tương tác uốn và cắt",
-                "η ≤ 1,00", interactionRatio,
-                $"{interactionRatio:0.000}", "Căn bậc hai tổng bình phương")
+                "τ = V·S/(I·tw) ≤ Rs·γc", shearRatio,
+                $"{shearStress:0.00} / {rs * gammaC:0.00} MPa",
+                "V max toàn dầm; Rs = 0,58Ry"),
+            CreateResult("Tổ hợp", "Ứng suất tương đương bụng - cánh",
+                "σtđ ≤ 1,15·Ry·γc", interactionRatio,
+                $"{equivalentStress:0.00} / {1.15 * ry * gammaC:0.00} MPa",
+                "σtđ = √(σ1² + 3τ1²); M và V cùng tiết diện")
         };
 
         double phiB = input.LateralTorsionalBucklingFactor;
@@ -77,10 +98,11 @@ public sealed class BeamCalculationService : IBeamCalculationService
         double flangeSlenderness = flangeOutstand / tf * normalizedFactor;
         double webSlenderness = hw / tw * normalizedFactor;
 
-        // Giới hạn độ mảnh quy ước dùng cho dầm chữ I chịu uốn trong phạm vi đề tài.
+        // Giới hạn độ mảnh quy ước λ của bản cánh chịu nén theo TCVN 5575:2024, bảng 17 
         const double flangeLimit = 0.50;
-        const double webLimit = 3.20;
         double flangeRatio = flangeSlenderness / flangeLimit;
+        // Giới hạn độ mảnh quy ước λ của bản bụng chịu nén theo TCVN 5575:2024 
+        const double webLimit = 3.20;        
         double webRatio = webSlenderness / webLimit;
 
         var stability = new List<BeamCheckResult>
@@ -183,6 +205,13 @@ public sealed class BeamCalculationService : IBeamCalculationService
             || input.UnbracedLength > input.SpanLength)
         {
             throw new ArgumentException("Chiều dài không giằng phải lớn hơn 0 và không vượt quá nhịp dầm.");
+        }
+
+        if (Math.Abs(input.DesignMoment) <= 0 && Math.Abs(input.DesignShear) <= 0 )
+        {
+            throw new ArgumentException(
+                "Mômen và lực cắt thiết kế đang đồng thời bằng 0. "
+                + "Hãy nhập nội lực hoặc đồng bộ từ Etabs trước khi kiểm tra.");
         }
     }
 }

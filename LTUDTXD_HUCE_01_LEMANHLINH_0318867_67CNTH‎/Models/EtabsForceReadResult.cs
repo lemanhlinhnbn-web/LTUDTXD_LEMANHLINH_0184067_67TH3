@@ -18,6 +18,8 @@ public sealed class EtabsForceReadResult
     public double MaximumMoment { get; private set; }
     public double MinimumMoment { get; private set; }
     public double MaximumShear { get; private set; }
+    public double ShearAtMaximumMoment { get; private set;  }
+    public double GoverningShearStation { get; private set; }
     public double SecondaryShear { get; private set; }
     public double AxialForce { get; private set; }
     public double GoverningStation { get; private set; }
@@ -40,6 +42,8 @@ public sealed class EtabsForceReadResult
         double maximumMoment,
         double minimumMoment,
         double maximumShear,
+        double shearAtMaximumMoment,
+        double governingShearStation,
         double secondaryShear,
         double axialForce,
         double governingStation,
@@ -62,6 +66,8 @@ public sealed class EtabsForceReadResult
             MaximumMoment = maximumMoment,
             MinimumMoment = minimumMoment,
             MaximumShear = maximumShear,
+            ShearAtMaximumMoment = shearAtMaximumMoment,
+            GoverningShearStation = governingShearStation,
             SecondaryShear = secondaryShear,
             AxialForce = axialForce,
             GoverningStation = governingStation,

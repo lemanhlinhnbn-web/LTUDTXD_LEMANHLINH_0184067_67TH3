@@ -225,6 +225,7 @@ public sealed class EtabsSourceViewModel : PageViewModelBase
         }
         _input.DesignMoment = Math.Abs(result.MaximumMoment);
         _input.DesignShear = Math.Abs(result.MaximumShear);
+        _input.ShearAtMaxMoment = Math.Abs(result.ShearAtMaximumMoment);
 
         double scale = Math.Max(
             Math.Abs(result.MaximumMoment),
@@ -238,8 +239,11 @@ public sealed class EtabsSourceViewModel : PageViewModelBase
             $"M3 max tại x = {result.GoverningStation:0.###} m", result.GoverningMomentCase,
             result.MaximumMoment, "kN.m", "#2D6CDF", scale));
         InternalForces.Add(CreateForce(
-            "V2 tại vị trí M3 max", result.GoverningShearCase,
+            $"V2 max tại x= {result.GoverningShearStation:0.###} m", result.GoverningShearCase,
             result.MaximumShear, "kN", "#4A948D", scale));
+        InternalForces.Add(CreateForce(
+            "V2 tại vị trí M3 max", result.GoverningMomentCase,
+            result.ShearAtMaximumMoment, "kN", "#4A948D", scale));
         InternalForces.Add(CreateForce(
             "V3 tại vị trí M3 max", result.GoverningShearCase,
             result.SecondaryShear, "kN", "#2563EB", scale));
@@ -252,11 +256,19 @@ public sealed class EtabsSourceViewModel : PageViewModelBase
         RefreshForceResultState();
         ReplaceDiagramSeries(result);
 
+        string axialWarning = Math.Abs(result.AxialForce) > 1.0
+            ? $" LƯU Ý: dầm có lực dọc P = {result.AxialForce:0.##} kN; "
+                + "chương trình chưa xét ảnh hưởng của lực dọc, cần kiểm tra bổ sung."
+            : string.Empty;
+
         ConnectionMessage = result.Message
             + $" Đã đồng bộ tiết diện {result.SectionName}, vật liệu {result.MaterialName}, "
-            + "hình học, chiều dài, M3 lớn nhất theo trị tuyệt đối và V2 đi kèm "
-            + "tại cùng tổ hợp/vị trí sang màn hình Thông số dầm. "
-            + "Biểu đồ nội lực đang hiển thị M3, V2 và V3 của tổ hợp chi phối.";
+            + "hình học, chiều dài, M3 max (bền uốn), V2 max toàn dầm (bền cắt) "
+            + "và V2 tại tiết diện M3 max (tương tác) sang màn hình thông số dầm."
+            + "Biểu đồ nội lực đang hiển thị M3, V2 và V3 của tổ hợp chi phối. "
+            + "Hệ số φb đang là giá trị GỢI Ý tự động; phải đối chiếu TCVN 5575 "
+            + "cho sơ đồ giữ cánh nén thực tế trước khi dùng cho hồ sơ thiết kế"
+            +axialWarning;
         StatusBrush = "#20C9B0";
         Summary = $"Phần tử {result.FrameName} | Biểu đồ M, V, Q từ ETABS";
         return true;
@@ -331,11 +343,9 @@ public sealed class EtabsSourceViewModel : PageViewModelBase
         IReadOnlyList<EtabsForceDiagramPoint> points = result.DiagramPoints;
         if (points.Count == 0)
         {
-            points =
-            [
-                new() { Station = 0, Moment = result.MaximumMoment, Shear = result.MaximumShear },
-                new() { Station = result.SpanLength, Moment = result.MinimumMoment, Shear = result.MaximumShear }
-            ];
+            //Không đủ dữ liệu điểm: không vẽ biểu đồ thay vì tự tạo điểm giả
+            //Dễ gây hiểu nhầm về hình dạng biểu đồ nội lực thật
+            return;
         }
 
         InternalForceDiagrams.Add(CreateDiagramSeries(
@@ -371,7 +381,7 @@ public sealed class EtabsSourceViewModel : PageViewModelBase
         string stroke,
         double axisY,
         IReadOnlyList<EtabsForceDiagramPoint> source,
-        Func<EtabsForceDiagramPoint, double> valueSelector)
+        Func<EtabsForceDiagramPoint, double> valueSelector)        
     {
         const double left = 66;
         const double width = 454;
@@ -390,7 +400,7 @@ public sealed class EtabsSourceViewModel : PageViewModelBase
         foreach (EtabsForceDiagramPoint point in source.OrderBy(point => point.Station))
         {
             double value = valueSelector(point);
-            double x = left + (point.Station - minStation) / span * width;
+            double x = left + (point.Station - minStation) / span * width;            
             double y = axisY - value / maxAbs * halfHeight;
             Point diagramPoint = new(x, y);
             polyline.Add(diagramPoint);
@@ -477,6 +487,7 @@ public sealed class EtabsSourceViewModel : PageViewModelBase
         public double ElasticModulus { get; private set; }
         public double DesignMoment { get; private set; }
         public double DesignShear { get; private set; }
+        public double ShearAtMaxMoment { get; private set; }
         public double WorkingConditionFactor { get; private set; }
         public double LateralTorsionalBucklingFactor { get; private set; }
         public string SteelGrade { get; private set; } = string.Empty;
@@ -494,6 +505,7 @@ public sealed class EtabsSourceViewModel : PageViewModelBase
                 ElasticModulus = input.ElasticModulus,
                 DesignMoment = input.DesignMoment,
                 DesignShear = input.DesignShear,
+                ShearAtMaxMoment = input.ShearAtMaxMoment,
                 WorkingConditionFactor = input.WorkingConditionFactor,
                 LateralTorsionalBucklingFactor = input.LateralTorsionalBucklingFactor,
                 SteelGrade = input.SteelGrade
@@ -511,6 +523,7 @@ public sealed class EtabsSourceViewModel : PageViewModelBase
             input.ElasticModulus = ElasticModulus;
             input.DesignMoment = DesignMoment;
             input.DesignShear = DesignShear;
+            input.ShearAtMaxMoment = ShearAtMaxMoment;
             input.WorkingConditionFactor = WorkingConditionFactor;
             input.LateralTorsionalBucklingFactor = LateralTorsionalBucklingFactor;
             input.SteelGrade = SteelGrade;

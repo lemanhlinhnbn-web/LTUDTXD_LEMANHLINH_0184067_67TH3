@@ -70,7 +70,7 @@ public sealed class MainViewModel : ViewModelBase
             Key = "BeamParameters",
             Icon = "\uE9D2",
             Title = "Thông số dầm I",
-            Description = "TCVN 2275:2024"
+            Description = "TCVN 5575:2024"
         });
         NavigationItems.Add(new NavigationItem
         {

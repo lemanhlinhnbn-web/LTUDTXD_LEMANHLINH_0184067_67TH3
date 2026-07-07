@@ -240,21 +240,32 @@ public sealed class EtabsService : IEtabsService
                         "ETABS chưa có kết quả nội lực cho phần tử. Hãy Run Analysis trước.");
                 }
 
+                // 1) Vị trí có |M3| lớn nhất (xét mọi tổ hợp) - dùng cho điều kiện bền uốn
                 int governingMomentIndex = 0;
+                // 2) Vị trí có |V2| lớn nhất (xét mọi tổ hợp) - dùng cho điều kiện bền cắt
+                int governingShearIndex =0;
                 for (int index = 1; index < count; index++)
                 {
                     if (Math.Abs(m3[index]) > Math.Abs(m3[governingMomentIndex]))
                     {
                         governingMomentIndex = index;
                     }
+
+                    if (Math.Abs(v2[index]) > Math.Abs(v2[governingShearIndex]))
+                    {
+                        governingShearIndex = index;
+                    }
                 }
 
                 double designMoment = m3[governingMomentIndex];
-                double accompanyingShear = v2[governingMomentIndex];
+                double shearAtMaxMoment = v2[governingShearIndex];                
                 double accompanyingSecondaryShear = v3[governingMomentIndex];
                 double accompanyingAxialForce = p[governingMomentIndex];
                 double governingStation = objSta[governingMomentIndex];
                 string governingLoadCase = loadCase[governingMomentIndex];
+                double designShear = v2[governingShearIndex];
+                double governingShearStation = objSta[governingShearIndex];
+                string governingShearCase = loadCase[governingShearIndex];
                 int minimumMomentIndex = governingMomentIndex;
                 List<EtabsForceDiagramPoint> diagramPoints = new();
                 for (int index = 0; index < count; index++)
@@ -286,7 +297,9 @@ public sealed class EtabsService : IEtabsService
                     frameName,
                     designMoment,
                     m3[minimumMomentIndex],
-                    accompanyingShear,
+                    designShear,
+                    shearAtMaxMoment,
+                    governingShearStation,
                     accompanyingSecondaryShear,
                     accompanyingAxialForce,
                     governingStation,
@@ -359,6 +372,33 @@ public sealed class EtabsService : IEtabsService
         return activeEtabs;
     }
 
+    private static string NaturalSortKey(string name)
+    {
+        // Đệm số về 8 chữ số để "B2" đứng trước "B10" khi sắp xếp chuỗi.
+        var builder = new System.Text.StringBuilder(name.Length + 8);
+        int index = 0;
+        while (index < name.Length)
+        {
+            if (char.IsDigit(name[index]))
+            {
+                int start = index;
+                while (index < name.Length && char.IsDigit(name[index]))
+                {
+                    index++;
+                }
+
+                builder.Append(name.Substring(start, index - start).PadLeft(8, '0'));
+            }
+            else
+            {
+                builder.Append(name[index]);
+                index++;
+            }
+        }
+        
+        return builder.ToString();
+    }
+    
     private static void ReleaseComObject(object? comObject)
     {
         if (comObject is not null && Marshal.IsComObject(comObject))
