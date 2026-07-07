@@ -26,7 +26,7 @@ public sealed class BeamCheckViewModel : PageViewModelBase
         Func<string?>? syncSelectedFrameBeforeCheck = null)
         : base(
             "Kiểm tra dầm thép",
-            "Kiểm tra điều kiện bền, ổn định tổng thể và ổn định cục bộ theo TCVN 2275:2024.")
+            "Kiểm tra điều kiện bền, ổn định tổng thể và ổn định cục bộ theo TCVN 5575:2024.")
     {
         _input = input;
         _calculationService = calculationService;

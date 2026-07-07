@@ -113,7 +113,8 @@ public sealed class ExcelReportExportService : IReportExportService
             WriteParameter(writer, ref row, "Mô đun đàn hồi E", input.ElasticModulus, "MPa", "Vật liệu");
             WriteParameter(writer, ref row, "Mô men thiết kế M", input.DesignMoment, "kN.m", "Nội lực");
             WriteParameter(writer, ref row, "Lực cắt thiết kế V", input.DesignShear, "kN", "Nội lực");
-            WriteParameter(writer, ref row, "Hệ số điều kiện làm việc γc", input.WorkingConditionFactor, string.Empty, "TCVN 2275:2024");
+            WriteParameter(writer, ref row, "Lực cắt tại tiết diện M max", input.ShearAtMaxMoment, "kN", "Nội lực");
+            WriteParameter(writer, ref row, "Hệ số điều kiện làm việc γc", input.WorkingConditionFactor, string.Empty, "TCVN 5575:2024");
             WriteParameter(writer, ref row, "Hệ số ổn định φb", input.LateralTorsionalBucklingFactor, string.Empty, "Uốn xoắn ngang");
             row++;
 

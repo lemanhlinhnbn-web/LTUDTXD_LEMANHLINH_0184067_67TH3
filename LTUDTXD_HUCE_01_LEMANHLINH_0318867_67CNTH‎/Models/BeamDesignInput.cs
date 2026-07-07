@@ -15,6 +15,7 @@ public sealed class BeamDesignInput : INotifyPropertyChanged
     private double _elasticModulus = 206000;
     private double _designMoment = 186;
     private double _designShear = 124;
+    private double _shearAtMaxMoment;
     private double _workingConditionFactor = 1;
     private double _lateralTorsionalBucklingFactor = 0.80;
     private string _steelGrade = "CT3";
@@ -31,6 +32,7 @@ public sealed class BeamDesignInput : INotifyPropertyChanged
     public double ElasticModulus { get => _elasticModulus; set => SetField(ref _elasticModulus, value); }
     public double DesignMoment { get => _designMoment; set => SetField(ref _designMoment, value); }
     public double DesignShear { get => _designShear; set => SetField(ref _designShear, value); }
+    public double ShearAtMaxMoment { get => _shearAtMaxMoment; set => SetField(ref _shearAtMaxMoment, value); }
     public double WorkingConditionFactor { get => _workingConditionFactor; set => SetField(ref _workingConditionFactor, value); }
     public double LateralTorsionalBucklingFactor { get => _lateralTorsionalBucklingFactor; set => SetField(ref _lateralTorsionalBucklingFactor, value); }
 
@@ -48,7 +50,7 @@ public sealed class BeamDesignInput : INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SteelGrade)));
         }
     }
-    public string Standard { get; } = "TCVN 2275:2024";
+    public string Standard { get; } = "TCVN 5575:2024";
 
     private void SetField(ref double field, double value, [CallerMemberName] string? propertyName = null)
     {
