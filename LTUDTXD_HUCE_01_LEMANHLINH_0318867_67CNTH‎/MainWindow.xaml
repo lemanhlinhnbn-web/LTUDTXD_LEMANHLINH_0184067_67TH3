@@ -316,7 +316,7 @@
                                            Foreground="#FFFFFF"
                                            FontSize="17"
                                            FontWeight="SemiBold" />
-                                <TextBlock Text="TCVN 2275:2024"
+                                <TextBlock Text="TCVN 5575:2024"
                                            Foreground="#9AA6B8"
                                            FontSize="12" />
                             </StackPanel>
