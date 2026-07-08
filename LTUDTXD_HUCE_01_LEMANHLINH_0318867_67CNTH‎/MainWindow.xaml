@@ -606,7 +606,7 @@
                                                                FontWeight="SemiBold" />
                                                 </StackPanel>
                                                 <TextBlock Grid.Column="1"
-                                                           Text="TCVN 2275:2024"
+                                                           Text="TCVN 5575:2024"
                                                            Foreground="{StaticResource TextSecondaryBrush}"
                                                            FontSize="11"
                                                            VerticalAlignment="Center" />
